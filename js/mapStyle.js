@@ -244,52 +244,40 @@ var darkMap = [
         ]
     }
 ]
-
-// var blueMap = [
-//     { elementType: 'geometry', stylers: [{ color: '#0f1c2c' }] },
-//     { elementType: 'labels.text.stroke', stylers: [{ color: '#0f1c2c' }] },
-//     { elementType: 'labels.text.fill', stylers: [{ color: '#a8dadc' }] },
-//     { featureType: 'water', stylers: [{ color: '#1b263b' }] },
-//     { featureType: 'road', stylers: [{ color: '#2a3a50' }] },
-//     { featureType: 'poi', stylers: [{ visibility: 'on' }] },
-//     { featureType: 'poi.school', stylers: [{ visibility: 'on' }] },
-//     { featureType: 'poi.medical', stylers: [{ visibility: 'on' }] },
-//     { featureType: 'poi.park', stylers: [{ visibility: 'on' }] }
-// ]
 var blueMap = [
   { elementType: "geometry", stylers: [{ color: "#0f1c2c" }] },
   { elementType: "labels.text.stroke", stylers: [{ color: "#0f1c2c" }] },
   { elementType: "labels.text.fill", stylers: [{ color: "#a8dadc" }] },
 
-  // 道路：更浅的蓝灰色
+  // road
   { featureType: "road", elementType: "geometry", stylers: [{ color: "#2a3a50" }] },
   { featureType: "road.highway", elementType: "geometry", stylers: [{ color: "#324a6b" }] },
   { featureType: "road.highway", elementType: "geometry.stroke", stylers: [{ color: "#3b5a7d" }] },
   { featureType: "road", elementType: "labels.text.fill", stylers: [{ color: "#9ac8ff" }] },
 
-  // 水域：深蓝色
+//    Water
   { featureType: "water", elementType: "geometry", stylers: [{ color: "#1b263b" }] },
   { featureType: "water", elementType: "labels.text.fill", stylers: [{ color: "#8ec1f3" }] },
 
-  // 公园、绿地
+  // Park
   { featureType: "poi.park", elementType: "geometry", stylers: [{ color: "#1e3b2f" }] },
   { featureType: "poi.park", elementType: "labels.text.fill", stylers: [{ color: "#66cdaa" }] },
 
-  // 兴趣点（POI）
+  // Special Place
   { featureType: "poi", elementType: "geometry", stylers: [{ color: "#203040" }] },
   { featureType: "poi", elementType: "labels.text.fill", stylers: [{ color: "#9bd1ff" }] },
   { featureType: "poi.school", stylers: [{ visibility: "on" }] },
   { featureType: "poi.medical", stylers: [{ visibility: "on" }] },
   { featureType: "poi.business", stylers: [{ visibility: "on" }] },
 
-  // 行政区域边界
+  // boundary
   { featureType: "administrative", elementType: "geometry", stylers: [{ color: "#385b7b" }] },
   { featureType: "administrative.country", elementType: "labels.text.fill", stylers: [{ color: "#d1e4ff" }] },
 
-  // 公交、铁路
+  // transport
   { featureType: "transit", elementType: "geometry", stylers: [{ color: "#28486a" }] },
   { featureType: "transit.station", elementType: "labels.text.fill", stylers: [{ color: "#a0c4ff" }] },
 
-  // 保留所有兴趣点显示
+  // keep SP
   { featureType: "poi", stylers: [{ visibility: "on" }] }
 ];

@@ -15,7 +15,6 @@
 
 <body>
     <script type='text/javascript' src='https://code.jquery.com/jquery-3.7.1.js'></script>
-    <script type='text/javascript' src='./js/xdate.js'></script>
     <script type='text/javascript' src='./js/mapStyle.js'></script>
 
     <script src="https://code.jquery.com/jquery.js"></script>
@@ -25,7 +24,7 @@
 
     <!-- Logo -->
     <div class="Logo">
-        <div><strong>HouseLens London222</strong></div>
+        <div><strong>HouseLens London</strong></div>
     </div>
 
     <div id="map-canvas"></div>
@@ -47,50 +46,11 @@
     <!-- Start Button -->
     <button type="button" class="floating-btn btn btn-success" id="startBtn">Start</button>
 
-
     <!-- Google Maps API -->
     <script type="text/javascript"
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCK_2YHUeL00WeSl7OSZCKATaHIH7cxKG4&libraries=visualization"> </script>
-    <script>
 
-        // START Button interation
-        document.addEventListener("DOMContentLoaded", () => {
-            initMap();
-            const startBtn = document.getElementById("startBtn");
-            const logo = document.querySelector(".Logo");
-            startBtn.addEventListener("click", () => {
-                document.getElementById("intro").style.display = "none";
-                startBtn.style.display = "none";   // Hide Button
-                logo.style.display = "none";
-                window.location.href = "./heatmap.html"; 
-                addMarkers();
-            });
-        });
-
-        // Only London
-        function initMap() {
-            const londonBounds = {
-                north: 51.7,
-                south: 51.3,
-                west: -0.5,
-                east: 0.2
-            };
-
-            var mapOptions = {
-                center: { lat: 51.5, lng: -0.00 },
-                zoom: 9,
-                maxZoom: 18,   // Don't forget the comma on this line
-                restriction: { latLngBounds: londonBounds, strictBounds: false },
-                styles: blueMap
-                // center: new google.maps.LatLng(51.514756, -0.104345),
-                // zoom: 14			
-            };
-
-            map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
-        }
-
-
-    </script>
+    <script src="./js/Homepage.js"></script>
 </body>
 
 </html>
