@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("intro").style.display = "none";
         startBtn.style.display = "none";   // Hide Button
         logo.style.display = "none";
-        window.location.href = "./heatmap.html";
+        window.location.href = "./Heatmap.html";
         addMarkers();
     });
 });
