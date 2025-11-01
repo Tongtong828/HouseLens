@@ -31,6 +31,20 @@
           <!-- load Borough name -->
         </ul>
       </div>
+      <!-- Filter by Price -->
+      <div class="dropdown">
+        <button class="btn btn-outline-light dropdown-toggle" type="button" id="priceDropdown" data-bs-toggle="dropdown"
+          aria-expanded="false">
+          Filter by Price
+        </button>
+        <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="priceDropdown">
+          <li><a class="dropdown-item price-filter" data-min="0" data-max="400000">£0 - £400k</a></li>
+          <li><a class="dropdown-item price-filter" data-min="400000" data-max="600000">£400k - £600k</a></li>
+          <li><a class="dropdown-item price-filter" data-min="600000" data-max="800000">£600k - £800k</a></li>
+          <li><a class="dropdown-item price-filter" data-min="800000" data-max="2000000">£800k+</a></li>
+        </ul>
+      </div>
+
 
       <!-- Reset button -->
       <button class="btn btn-outline-light" onclick="resetMap()">Reset</button>
@@ -60,25 +74,25 @@
   </template>
 
   <!-- dropdpwn list info window -->
-<div id="info-panel" class="info-panel">
-  <div class="panel-header">
-    <h2 id="panel-borough">Borough Name</h2>
-    <button id="toggle-panel" class="toggle-btn" title="Close Panel">⮜</button>
-  </div>
-
-  <div class="panel-body">
-    <div class="panel-stats">
-      <p><strong>Average Price: </strong> <span id="panel-price">£0</span></p>
+  <div id="info-panel" class="info-panel collapsed">
+    <div class="panel-header">
+      <h2 id="panel-borough">Borough Name</h2>
+      <button id="toggle-panel" class="toggle-btn" title="Close Panel">⮜</button>
     </div>
 
-    <div class="chart-container">
-      <canvas id="priceChart"></canvas>
+    <div class="panel-body">
+      <div class="panel-stats">
+        <p><strong>Average Price: </strong> <span id="panel-price">£0</span></p>
+      </div>
+
+      <div class="chart-container">
+        <canvas id="priceChart"></canvas>
+      </div>
     </div>
   </div>
-</div>
 
-<!-- Open button -->
-<button id="expand-btn" class="expand-btn" title="Open Panel">⮞</button>
+  <!-- Open button -->
+  <button id="expand-btn" class="expand-btn" title="Open Panel">⮞</button>
   <!-- Google Maps API -->
   <script
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCK_2YHUeL00WeSl7OSZCKATaHIH7cxKG4&libraries=visualization"></script>

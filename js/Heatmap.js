@@ -1,6 +1,7 @@
 let map;
 let selectedBorough = null; // selected area
-let markers = []; 
+let markers = [];
+
 const londonBounds = {
   north: 51.75,
   south: 51.2,
@@ -66,11 +67,7 @@ const transactions = [
     postcode: "N1 2TP"
   }
 ];
-// ===========================
-// 📊 信息栏控制逻辑
-// ===========================
-
-// 假设有历史价格数据（未来你可以接数据库）
+//Left info panel
 const boroughTrends = {
   "Camden": [520000, 540000, 570000, 600000, 650000],
   "Islington": [480000, 500000, 530000, 560000, 610000],
@@ -125,8 +122,7 @@ function initMap() {
     });
   });
 
-  // couloured area
-  map.data.setStyle(feature => {
+  originalStyle = feature => {
     const name = feature.getProperty("name") || feature.getProperty("NAME");
     const price = boroughPrices[name] || 200000;
     return {
@@ -135,7 +131,19 @@ function initMap() {
       strokeColor: "#ffffff",
       strokeWeight: 1.2
     };
+  };
+  map.data.setStyle(originalStyle);
+
+  map.data.revertStyle();
+  map.data.forEach(feature => {
+    const name = feature.getProperty("NAME") || feature.getProperty("name");
+    const price = boroughPrices[name] || 0;
+
+    map.data.overrideStyle(feature, {
+      fillColor: getColor(price)
+    });
   });
+
 
   // Tooltip
   const tooltip = document.getElementById("map-tooltip");
@@ -224,10 +232,9 @@ function initMap() {
   });
 
   // transaction icon
-  const infoWindow = new google.maps.InfoWindow();
+ infoWindow = new google.maps.InfoWindow();
 
   // Store all marker
-  // const markers = [];
   markers = [];
 
   // Iteration + add marker
@@ -242,10 +249,11 @@ function initMap() {
       }
     });
 
+
     // record Borough
     marker.borough = item.borough;
     markers.push(marker);
-
+    marker.price = item.price;   //  add price field
     // Icon Info window
     marker.addListener("click", () => {
       const template = document.getElementById("info-template");
@@ -339,6 +347,43 @@ function processGeometry(geometry, bounds) {
   }
 }
 
+// Price Filter
+const priceFilterButtons = document.querySelectorAll(".price-filter");
+
+priceFilterButtons.forEach(btn => {
+  btn.addEventListener("click", () => {
+    const min = Number(btn.dataset.min);
+    const max = Number(btn.dataset.max);
+
+    // Clear Selected borough
+    selectedBorough = null;
+    // map.data.revertStyle();
+
+    // Hide panel
+    panel.classList.add("collapsed");
+    expandBtn.style.display = "block";
+
+    // Hight selected borough
+    map.data.setStyle(feature => {
+      const name = feature.getProperty("NAME") || feature.getProperty("name");
+      const price = boroughPrices[name] || 0;
+      const match = price >= min && price <= max;
+
+      return {
+        fillColor: getColor(price),
+        fillOpacity: match ? 0.9 : 0.15,
+        strokeColor: match ? "#00ffff" : "#333",
+        strokeWeight: match ? 3 : 1
+      };
+    });
+    // Show markers that match price
+    markers.forEach(marker => {
+      marker.setMap(marker.price >= min && marker.price <= max ? map : null);
+    });
+  });
+});
+
+
 // Open Panel
 function openInfoPanel(boroughName) {
   const panel = document.getElementById("info-panel");
@@ -355,8 +400,6 @@ function openInfoPanel(boroughName) {
   const avgPrice = boroughPrices[boroughName] || "N/A";
   priceEl.textContent = "£" + avgPrice.toLocaleString();
 
-  // Open Panel
-  panel.classList.add("open");
 
   // Get canvas
   const canvas = document.getElementById("priceChart");
@@ -424,16 +467,20 @@ expandBtn.addEventListener("click", () => {
 
 function resetMap() {
   selectedBorough = null;
+
+  map.data.setStyle(originalStyle);
   map.data.revertStyle();
+
   map.setZoom(10);
   map.setCenter({ lat: 51.5, lng: -0.1 });
+
   markers.forEach(m => m.setMap(map));
-  closeInfoPanel();
+
+  if (infoWindow) infoWindow.close();
+
   panel.classList.add("collapsed");
   expandBtn.style.display = "block";
   toggleBtn.textContent = "⮞";
-  toggleBtn.title = "Open Panel";
-
 }
 
 window.onload = initMap;
