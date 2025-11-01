@@ -91,7 +91,7 @@ body {
     margin: .4rem 0;
 }
 
-/* 悬浮按钮样式 */
+
 .floating-btn {
     position: absolute;
     left: 50%;
@@ -116,13 +116,12 @@ body {
     font-size: 14px;
     line-height: 1.4;
 }
-/* Dropdown 滚动优化 */
+
 .scrollable-dropdown {
-  max-height: 300px;   /* 限制最大高度 */
-  overflow-y: auto;    /* 出现滚动条 */
+  max-height: 300px;  
+  overflow-y: auto;    
 }
 
-/* 美化滚动条 */
 .scrollable-dropdown::-webkit-scrollbar {
   width: 6px;
 }
@@ -136,14 +135,12 @@ body {
   background: rgba(255, 255, 255, 0.6);
 }
 
-/* 让 Reset 按钮和下拉菜单对齐 */
 .navbar .btn {
   font-size: 1rem;
   font-weight: 500;
   border-radius: 6px;
 }
 /* heatmap */
-/* 导航栏风格统一 */
 .navbar {
     background: rgba(10, 25, 35, 0.85) !important;
     backdrop-filter: blur(8px);
@@ -185,15 +182,24 @@ body {
     opacity: 1;
 }
 
+.info-window {
+  font-family: Roboto, sans-serif;
+  font-size: 14px;
+  color: #000;
+  line-height: 1.5;
+  padding: 4px 6px;
+  border-radius: 6px;
+}
+.info-window strong {
+  font-size: 15px;
+}
 
-/* 地图容器 */
 #map {
     width: 100%;
     height: 100vh;
     z-index: 1;
 }
 
-/* 图例 */
 .legend {
     position: absolute;
     bottom: 30px;
@@ -213,12 +219,108 @@ body {
     color: #8ec1f3;
 }
 
-/* 弹窗文字 */
+/* Info window content */
 .leaflet-popup-content strong {
     color: #2b82ff;
 }
 
-/* 边界 hover 效果 */
+/*  hover  */
 .leaflet-interactive {
     transition: all 0.2s ease-in-out;
+}
+
+/* left panel */
+.info-panel {
+  position: absolute;
+  top: 60px; 
+  left: 0;
+  width: 800px; 
+  height: calc(100% - 60px);
+  background: #f7faff;
+  border-right: 3px solid #007bff;
+  box-shadow: 2px 0 12px rgba(0,0,0,0.25);
+  padding: 15px 25px;
+  transform: translateX(0);
+  transition: transform 0.4s ease;
+  z-index: 1000;
+  overflow-y: auto;
+}
+
+.info-panel.collapsed {
+  transform: translateX(-800px);
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #007bff;
+  padding-bottom: 8px;
+  margin-bottom: 10px;
+}
+
+.panel-header h2 {
+  font-size: 22px;
+  color: #007bff;
+  margin: 0;
+}
+
+.toggle-btn {
+  background: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 4px 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background 0.3s;
+}
+
+.toggle-btn:hover {
+  background: #0056b3;
+}
+
+.panel-body {
+  padding: 5px;
+}
+
+.panel-stats {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
+
+.chart-container {
+  width: 100%;
+  height: 420px;
+  margin-top: 10px;
+}
+.chart-container canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.expand-btn {
+  position: absolute;
+  top: 120px;
+  left: 0;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 0 6px 6px 0;
+  padding: 8px 10px;
+  cursor: pointer;
+  font-size: 18px;
+  z-index: 999;
+  display: none;
+  box-shadow: 1px 1px 6px rgba(0,0,0,0.2);
+}
+
+.expand-btn:hover {
+  background: #0056b3;
+}
+
+.info-panel.collapsed + .expand-btn {
+  display: block;
 }
