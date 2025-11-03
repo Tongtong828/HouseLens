@@ -1,6 +1,12 @@
 let map;
 let selectedBorough = null; // selected area
 let markers = [];
+let boroughPrices = {};   // Store AvgPrice
+let transactions = [];    // Store transactions data
+let trendChart = null;
+let allTransactionsLoaded = false;
+let allTransactions = [];
+let clusterer = null;
 
 const londonBounds = {
   north: 51.75,
@@ -9,74 +15,36 @@ const londonBounds = {
   east: 0.3
 };
 
-// test price
-const boroughPrices = {
-  "Camden": 650000,
-  "Islington": 610000,
-  "Hackney": 580000,
-  "Newham": 460000,
-  "Bexley": 370000,
-  "Croydon": 400000,
-  "Ealing": 520000,
-  "Kensington and Chelsea": 1000000,
-  "Westminster": 950000,
-  "Bromley": 450000
-};
+function norm(s) {
+  return String(s || '').toUpperCase().replace(/\s+/g, ' ').trim();
+}
 
+function getBoroughKey(name) {
+  const n = norm(name);
+  if (n === "WESTMINSTER") return "CITY OF WESTMINSTER";
+  return n;
+}
 
-// Test deal
-const transactions = [
-  {
-    id: 1,
-    borough: "Camden",
-    lat: 51.529,
-    lng: -0.125,
-    price: 650000,
-    date: "2023-06-10",
-    type: "Flat",
-    postcode: "NW1 8YJ"
-  },
-  {
-    id: 2,
-    borough: "Croydon",
-    lat: 51.372,
-    lng: -0.102,
-    price: 450000,
-    date: "2023-05-25",
-    type: "Semi-Detached",
-    postcode: "CR0 6SD"
-  },
-  {
-    id: 3,
-    borough: "Ealing",
-    lat: 51.512,
-    lng: -0.305,
-    price: 520000,
-    date: "2023-08-12",
-    type: "Detached",
-    postcode: "W5 3TA"
-  },
-  {
-    id: 4,
-    borough: "Islington",
-    lat: 51.545,
-    lng: -0.105,
-    price: 610000,
-    date: "2023-07-15",
-    type: "Terraced",
-    postcode: "N1 2TP"
-  }
-];
-//Left info panel
-const boroughTrends = {
-  "Camden": [520000, 540000, 570000, 600000, 650000],
-  "Islington": [480000, 500000, 530000, 560000, 610000],
-  "Hackney": [420000, 450000, 490000, 540000, 580000],
-  "Croydon": [320000, 340000, 370000, 400000, 450000],
-  "Ealing": [400000, 430000, 460000, 490000, 520000],
-  "Westminster": [820000, 860000, 890000, 920000, 950000]
-};
+async function loadPrices() {
+  const res = await fetch("http://localhost:3001/api/borough-prices");
+  const data = await res.json();
 
+  data.forEach(item => {
+    boroughPrices[norm(item.borough)] = Number(item.avg_price);
+  });
+  console.log("Loaded boroughs:", Object.keys(boroughPrices).length);
+  updateMapColors();
+}
+
+async function loadTransactions(borough) {
+  const res = await fetch(`http://localhost:3001/api/transactions/${borough}`);
+  return await res.json();
+}
+
+async function loadBoroughTrend(borough) {
+  const res = await fetch(`http://localhost:3001/api/borough-trend/${borough}`);
+  return await res.json();
+}
 // colour list
 function getColor(price) {
   return price > 800000 ? "#800026" :
@@ -88,6 +56,7 @@ function getColor(price) {
               price > 150000 ? "#FED976" :
                 "#FFEDA0";
 }
+
 
 function initMap() {
   map = new google.maps.Map(document.getElementById("map-canvas"), {
@@ -120,30 +89,8 @@ function initMap() {
       li.onclick = () => focusBorough(name);
       list.appendChild(li);
     });
+    loadPrices();
   });
-
-  originalStyle = feature => {
-    const name = feature.getProperty("name") || feature.getProperty("NAME");
-    const price = boroughPrices[name] || 200000;
-    return {
-      fillColor: getColor(price),
-      fillOpacity: 0.75,
-      strokeColor: "#ffffff",
-      strokeWeight: 1.2
-    };
-  };
-  map.data.setStyle(originalStyle);
-
-  map.data.revertStyle();
-  map.data.forEach(feature => {
-    const name = feature.getProperty("NAME") || feature.getProperty("name");
-    const price = boroughPrices[name] || 0;
-
-    map.data.overrideStyle(feature, {
-      fillColor: getColor(price)
-    });
-  });
-
 
   // Tooltip
   const tooltip = document.getElementById("map-tooltip");
@@ -154,7 +101,9 @@ function initMap() {
 
     // Get name price
     const name = event.feature.getProperty("name") || event.feature.getProperty("NAME");
-    const price = boroughPrices[name] || "No data";
+    const price = boroughPrices[getBoroughKey(name)] || "No data";
+
+
 
     // Highlight borough
     map.data.overrideStyle(event.feature, {
@@ -215,6 +164,14 @@ function initMap() {
     });
   });
 
+  // Click to load marker
+  map.data.addListener("click", event => {
+    const name = event.feature.getProperty("name") || event.feature.getProperty("NAME");
+    if (!name) return;
+
+    focusBorough(name);  // Automatic load markers + panel
+  });
+
   map.data.addListener("mouseout", event => {
     // reset style
     if (!selectedBorough) {
@@ -231,56 +188,63 @@ function initMap() {
     }
   });
 
-  // transaction icon
- infoWindow = new google.maps.InfoWindow();
 
   // Store all marker
   markers = [];
 
-  // Iteration + add marker
-  transactions.forEach((item) => {
-    const marker = new google.maps.Marker({
-      position: { lat: item.lat, lng: item.lng },
-      map: map,
-      title: item.borough,
-      icon: {
-        url: "https://maps.google.com/mapfiles/ms/icons/red-dot.png",
-        scaledSize: new google.maps.Size(30, 30)
-      }
-    });
-
-
-    // record Borough
-    marker.borough = item.borough;
-    markers.push(marker);
-    marker.price = item.price;   //  add price field
-    // Icon Info window
-    marker.addListener("click", () => {
-      const template = document.getElementById("info-template");
-      const content = template.content.cloneNode(true);
-
-      // Get data(test)
-      content.querySelector(".borough").textContent = item.borough;
-      content.querySelector(".type").textContent = item.type;
-      content.querySelector(".price").textContent = item.price.toLocaleString();
-      content.querySelector(".date").textContent = item.date;
-      content.querySelector(".postcode").textContent = item.postcode;
-
-      const wrapper = document.createElement("div");
-      wrapper.appendChild(content);
-
-      infoWindow.setContent(wrapper.innerHTML);
-      infoWindow.open({
-        anchor: marker,
-        map,
-        shouldFocus: false
-      });
-    });
-
+  google.maps.event.addListenerOnce(map.data, "addfeature", () => {
+    updateMapColors();
   });
+
+  map.addListener("zoom_changed", async () => {
+    const z = map.getZoom();
+
+    if (z >= 15) {
+      // Load all markers once
+      if (!allTransactionsLoaded) {
+        const res = await fetch("http://localhost:3001/api/transactions");
+        allTransactions = await res.json();
+        allTransactionsLoaded = true;
+
+        // Show all markers on map
+        transactions = allTransactions;
+        showLocationMarkers();
+      } else {
+        // markers already loaded, just show them
+        markers.forEach(m => m.setMap(map));
+      }
+    } else {
+      // Zoom out -> hide markers unless borough selected
+      if (!selectedBorough) {
+        markers.forEach(m => m.setMap(null));
+      }
+    }
+  });
+// Ensure legend is visible
+document.getElementById("legend").style.display = "block";
+document.getElementById("goHomeBtn").addEventListener("click", () => {
+  window.location.href = "Homepage.html";
+});
 
 
 }
+
+
+function updateMapColors() {
+  map.data.setStyle(feature => {
+    const name = feature.getProperty("NAME") || feature.getProperty("name");
+    const price = boroughPrices[getBoroughKey(name)] || 0;
+
+    return {
+      fillColor: getColor(price),
+      fillOpacity: 0.75,
+      strokeColor: "#ffffff",
+      strokeWeight: 1.2
+    };
+  });
+}
+
+
 
 // Highlight selected area
 function focusBorough(name) {
@@ -290,7 +254,8 @@ function focusBorough(name) {
   // Reset map
   map.data.forEach(feature => {
     const fName = feature.getProperty("NAME") || feature.getProperty("name");
-    const price = boroughPrices[fName] || 200000;
+    const price = boroughPrices[getBoroughKey(fName)] || 200000;
+
 
     if (fName === name) {
       selectedFeature = feature;
@@ -321,7 +286,7 @@ function focusBorough(name) {
       });
     }, 800);
   }
-
+  markers.forEach(m => m.setMap(null));
   // Only show seleted icon
   markers.forEach(m => {
     if (m.borough === name) {
@@ -332,6 +297,14 @@ function focusBorough(name) {
   });
   openInfoPanel(name);
 
+  loadTransactions(name).then(data => {
+    transactions = Array.isArray(data) ? data : [];
+    showLocationMarkers();
+  });
+
+  loadBoroughTrend(name).then(data => {
+    updateTrendChart(data);
+  });
 }
 
 // Analysis GeoJSON 
@@ -366,7 +339,7 @@ priceFilterButtons.forEach(btn => {
     // Hight selected borough
     map.data.setStyle(feature => {
       const name = feature.getProperty("NAME") || feature.getProperty("name");
-      const price = boroughPrices[name] || 0;
+      const price = boroughPrices[getBoroughKey(name)] || 0;
       const match = price >= min && price <= max;
 
       return {
@@ -383,6 +356,17 @@ priceFilterButtons.forEach(btn => {
   });
 });
 
+function updateTrendChart(data) {
+  if (!trendChart) return;
+
+  const years = data.map(item => item.year);
+  const prices = data.map(item => Number(item.avg_price));
+
+  trendChart.data.labels = years;
+  trendChart.data.datasets[0].data = prices;
+  trendChart.update();
+}
+
 
 // Open Panel
 function openInfoPanel(boroughName) {
@@ -397,7 +381,8 @@ function openInfoPanel(boroughName) {
 
   // Update title and average price
   boroughEl.textContent = boroughName;
-  const avgPrice = boroughPrices[boroughName] || "N/A";
+  const avgPrice = boroughPrices[getBoroughKey(boroughName)] || "N/A";
+
   priceEl.textContent = "£" + avgPrice.toLocaleString();
 
 
@@ -410,18 +395,17 @@ function openInfoPanel(boroughName) {
     window.priceChart.destroy();
   }
 
-  // Change
-  const years = ["2019", "2020", "2021", "2022", "2023"];
-  const trend = boroughTrends[boroughName] || [0, 0, 0, 0, 0];
+  // Destroy previous chart
+  if (trendChart) trendChart.destroy();
 
-  //Create new line chart
-  window.priceChart = new Chart(ctx, {
+  // Create empty chart first, real data will fill after API returns
+  trendChart = new Chart(ctx, {
     type: "line",
     data: {
-      labels: years,
+      labels: [],
       datasets: [{
         label: "Average Price (£)",
-        data: trend,
+        data: [],
         borderColor: "#007bff",
         backgroundColor: "rgba(0,123,255,0.2)",
         tension: 0.3,
@@ -430,9 +414,7 @@ function openInfoPanel(boroughName) {
     },
     options: {
       responsive: true,
-      plugins: {
-        legend: { display: false }
-      },
+      plugins: { legend: { display: false } },
       scales: {
         y: {
           beginAtZero: false,
@@ -441,6 +423,7 @@ function openInfoPanel(boroughName) {
       }
     }
   });
+
 }
 
 // Left info panel
@@ -464,23 +447,72 @@ expandBtn.addEventListener("click", () => {
   expandBtn.style.display = "none"; // Close button
 });
 
+function showLocationMarkers() {
+  // Clear old marker
+  markers.forEach(marker => marker.setMap(null));
+  markers = [];
 
+  transactions.forEach(item => {
+    if (!item.latitude || !item.longitude) return;
+
+    const dateStr = item.date ? item.date.split(/[ T]/)[0] : "N/A";
+
+    const marker = new google.maps.Marker({
+      position: { lat: Number(item.latitude), lng: Number(item.longitude) },
+      map,
+      icon: {
+        path: google.maps.SymbolPath.CIRCLE,
+        scale: 5,
+        fillColor: "#ff4d4d",
+        strokeColor: "#ffffff",
+        strokeWeight: 1,
+        fillOpacity: 0.9
+      }
+    });
+
+const typeMap = {
+  D: "Detached ",
+  S: "Semi-detached ",
+  T: "Terraced ",
+  F: "Flat ",
+  O: "Other "
+};
+const typeLabel = typeMap[item.property_type] || item.property_type || "Unknown";
+
+    const info = `
+  <div style="color:black; font-size:14px; line-height:1.4;">
+    <b>£${Number(item.price).toLocaleString()}</b><br>
+    🏠 ${typeLabel}<br>
+    📍 ${item.street || ""}, ${item.postcode}<br>
+    🕒 ${dateStr}
+  </div>
+`;
+
+    const popup = new google.maps.InfoWindow({ content: info });
+    marker.addListener("click", () => popup.open(map, marker));
+
+    marker.borough = selectedBorough;
+    markers.push(marker);
+
+  });
+}
 function resetMap() {
   selectedBorough = null;
 
-  map.data.setStyle(originalStyle);
   map.data.revertStyle();
+  updateMapColors();
 
   map.setZoom(10);
   map.setCenter({ lat: 51.5, lng: -0.1 });
 
-  markers.forEach(m => m.setMap(map));
+  markers.forEach(m => m.setMap(null));
 
-  if (infoWindow) infoWindow.close();
+  transactions = [];
 
   panel.classList.add("collapsed");
   expandBtn.style.display = "block";
   toggleBtn.textContent = "⮞";
 }
+
 
 window.onload = initMap;
