@@ -8,14 +8,18 @@ app.use(express.json());
 
 console.log("DB user =", process.env.DB_USER);
 // Get the average price for each borough
-app.get("/api/borough-prices", async (req, res) => {
-    const [rows] = await pool.query(`
-    SELECT borough, AVG(price) AS avg_price
-    FROM transactions
-    GROUP BY borough
-  `);
-    res.json(rows);
+app.get("/api/borough-prices", async (req, res, next) => {
+    try {
+        console.log("📡 /api/borough-prices called");
+        const [rows] = await pool.query("SELECT borough, AVG(price) AS avg_price FROM transactions GROUP BY borough");
+        console.log("✅ Query success:", rows.length, "rows");
+        res.json(rows);
+    } catch (err) {
+        console.error("❌ Query failed:", err.message);
+        next(err); // 把错误交给全局中间件处理
+    }
 });
+
 
 // Get the transactions detail
 app.get("/api/transactions/:borough", async (req, res) => {
@@ -98,3 +102,10 @@ app.get("/api/borough-trend/:borough", async (req, res) => {
 
 
 app.listen(3001, () => console.log("✅ Backend running on port 3001"));
+
+// 全局错误处理中间件 —— 放在所有路由定义的最后
+app.use((err, req, res, next) => {
+    console.error('🔥 ERROR:', err); // 打印错误信息
+    res.status(500).json({ error: err.message }); // 返回 JSON 错误
+});
+

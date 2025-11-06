@@ -18,49 +18,49 @@
   <script type='text/javascript' src='./js/mapStyle.js'></script>
 
   <nav class="navbar navbar-dark fixed-top" style="background: rgba(10,25,35,0.85); backdrop-filter: blur(8px);">
-  <div class="container-fluid d-flex align-items-center justify-content-between">
+    <div class="container-fluid d-flex align-items-center justify-content-between">
 
-    <!-- Left: Home -->
-    <div class="nav-left">
-      <button id="goHomeBtn" class="btn btn-outline-light">🏠 Home</button>
-    </div>
-
-    <!-- Center: Filters -->
-    <div class="nav-center">
-      <!-- Borough Filter -->
-      <div class="dropdown">
-        <button class="btn btn-outline-light dropdown-toggle" type="button" id="boroughDropdown"
-          data-bs-toggle="dropdown" aria-expanded="false">
-          Filter by Borough
-        </button>
-        <ul class="dropdown-menu dropdown-menu-dark scrollable-dropdown" aria-labelledby="boroughDropdown"
-          id="boroughList">
-          <!-- Borough names load here -->
-        </ul>
+      <!-- Left: Home -->
+      <div class="nav-left">
+        <button id="goHomeBtn" class="btn btn-outline-light">🏠 Home</button>
       </div>
 
-      <!-- Price Filter -->
-      <div class="dropdown">
-        <button class="btn btn-outline-light dropdown-toggle" type="button" id="priceDropdown"
-          data-bs-toggle="dropdown" aria-expanded="false">
-          Filter by Price
-        </button>
-        <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="priceDropdown">
-          <li><a class="dropdown-item price-filter" data-min="0" data-max="400000">£0 - £400k</a></li>
-          <li><a class="dropdown-item price-filter" data-min="400000" data-max="600000">£400k - £600k</a></li>
-          <li><a class="dropdown-item price-filter" data-min="600000" data-max="800000">£600k - £800k</a></li>
-          <li><a class="dropdown-item price-filter" data-min="800000" data-max="2000000">£800k+</a></li>
-        </ul>
+      <!-- Center: Filters -->
+      <div class="nav-center">
+        <!-- Borough Filter -->
+        <div class="dropdown">
+          <button class="btn btn-outline-light dropdown-toggle" type="button" id="boroughDropdown"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            Filter by Borough
+          </button>
+          <ul class="dropdown-menu dropdown-menu-dark scrollable-dropdown" aria-labelledby="boroughDropdown"
+            id="boroughList">
+            <!-- Borough names load here -->
+          </ul>
+        </div>
+
+        <!-- Price Filter -->
+        <div class="dropdown">
+          <button class="btn btn-outline-light dropdown-toggle" type="button" id="priceDropdown"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            Filter by Price
+          </button>
+          <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="priceDropdown">
+            <li><a class="dropdown-item price-filter" data-min="0" data-max="400000">£0 - £400k</a></li>
+            <li><a class="dropdown-item price-filter" data-min="400000" data-max="600000">£400k - £600k</a></li>
+            <li><a class="dropdown-item price-filter" data-min="600000" data-max="800000">£600k - £800k</a></li>
+            <li><a class="dropdown-item price-filter" data-min="800000" data-max="2000000">£800k+</a></li>
+          </ul>
+        </div>
       </div>
-    </div>
 
-    <!-- Right: Reset -->
-    <div class="nav-right">
-      <button id="resetBtn" class="btn btn-outline-light" onclick="resetMap()">Reset</button>
-    </div>
+      <!-- Right: Reset -->
+      <div class="nav-right">
+        <button id="resetBtn" class="btn btn-outline-light" onclick="resetMap()">Reset</button>
+      </div>
 
-  </div>
-</nav>
+    </div>
+  </nav>
 
 
   <div id="legend" class="legend">

@@ -17,7 +17,7 @@ CREATE TABLE transactions (
     lng DECIMAL(10,6)
 );
 
-LOAD DATA LOCAL INFILE 'E:/A_connected environments/WebA/HouseLens/data/london_2021_2025_geo.csv'
+LOAD DATA LOCAL INFILE 'D:\\UCL\\CASA0017\\HouseLens\\Front\\data\\london_2021_2025_geo.csv'
 INTO TABLE transactions
 FIELDS TERMINATED BY ',' 
 ENCLOSED BY '"'
