@@ -1,0 +1,32 @@
+{
+  "name": "houselens",
+  "version": "1.0.0",
+  "description": "\"Data as lens, we see London's housing story\"",
+  "main": "server.js",
+  "scripts": {
+    "start": "concurrently \"npm run backend\" \"npm run frontend\"",
+    "backend": "node backend/server.js",
+    "frontend": "live-server ./Front --port=8080"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Tongtong828/HouseLens.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Tongtong828/HouseLens/issues"
+  },
+  "homepage": "https://github.com/Tongtong828/HouseLens#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "mysql2": "^3.15.3"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1",
+    "live-server": "^1.2.2"
+  }
+}
