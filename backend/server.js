@@ -7,6 +7,8 @@ app.use(cors());
 app.use(express.json());
 
 console.log("DB user =", process.env.DB_USER);
+
+
 // Get the average price for each borough
 app.get("/api/borough-prices", async (req, res) => {
     const [rows] = await pool.query(`
@@ -47,7 +49,8 @@ app.get("/api/transactions/:borough", async (req, res) => {
     }
 });
 
-// ✅ Get all London transactions
+
+// Get all London transactions
 app.get("/api/transactions", async (req, res) => {
     try {
         const [rows] = await pool.query(`
@@ -72,6 +75,7 @@ app.get("/api/transactions", async (req, res) => {
 });
 
 
+// Plot a line chart to show the price change in past five years
 app.get("/api/borough-trend/:borough", async (req, res) => {
     const borough = req.params.borough;
 

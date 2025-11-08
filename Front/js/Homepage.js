@@ -7,12 +7,12 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("intro").style.display = "none";
         startBtn.style.display = "none";   // Hide Button
         logo.style.display = "none";
-        window.location.href = "./Heatmap.html";
+        window.location.href = "Heatmap.html";
         addMarkers();
     });
 });
 
-// Only London
+
 function initMap() {
     const londonBounds = {
         north: 51.7,
@@ -24,7 +24,7 @@ function initMap() {
     var mapOptions = {
         center: { lat: 51.5, lng: -0.00 },
         zoom: 9,
-        maxZoom: 18,   // Don't forget the comma on this line
+        maxZoom: 18,
         restriction: { latLngBounds: londonBounds, strictBounds: false },
         styles: blueMap
         // center: new google.maps.LatLng(51.514756, -0.104345),

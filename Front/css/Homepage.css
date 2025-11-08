@@ -7,11 +7,6 @@ body {
     color: #fff;
 }
 
-#map-canvas {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-}
 
 .Logo {
     position: fixed;
@@ -32,40 +27,45 @@ body {
     font-size: 2.4rem;
     font-weight: 700;
     letter-spacing: 1px;
-    /* text-transform: uppercase; */
     background: linear-gradient(90deg, #2b82ff, #8ec1f3);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     font-family: 'Roboto', sans-serif;
 }
 
+
+.hero {
+    position: relative;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background:
+        radial-gradient(1200px 800px at 70% 20%, rgba(78, 138, 197, .18), transparent 60%),
+        linear-gradient(180deg, #0f2330 0%, #0b1a26 100%);
+}
+
+
 .intro-modal {
-    position: absolute;
-    top: 18%; 
-    left: 50%;
-    transform: translateX(-50%);
     background: rgba(20, 40, 55, 0.9);
     border-radius: 12px;
     padding: 2rem;
     width: 70%;
-    max-width: 1200px;
-
-    max-height: 55vh; 
-    overflow-y: auto; 
-
+    max-width: 1000px;
     text-align: center;
     z-index: 20;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-
-
 .intro-modal h1 {
-    font-size: 2rem;
+    font-size: 3rem;
     margin-bottom: .5rem;
 }
 
 .intro-modal p {
-    font-size: 1.5rem;
+    font-size: 2rem;
     color: rgba(255, 255, 255, 0.85);
     line-height: 1.6;
 }
@@ -77,17 +77,14 @@ body {
 }
 
 .feature-list li {
-    font-size: 1.5rem;
+    font-size: 2rem;
     margin: .4rem 0;
 }
 
+
 .floating-btn {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    bottom: 100px;
-    right: auto;
-    z-index: 50;
+    display: inline-block;
+    margin-top: 2.5rem;
     padding: 0.8rem 2rem;
     font-size: 1.2rem;
     border-radius: 30px;
@@ -97,4 +94,5 @@ body {
     font-weight: 600;
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
     transition: all 0.3s ease;
+    text-decoration: none;
 }
