@@ -1,12 +1,13 @@
-# 🏠 HouseLens: An Interactive Web Platform for Exploring London Housing Market Dynamics
+#  HouseLens: An Interactive Web Platform for Exploring London Housing Market Dynamics
+"Data as lens, we see London's housing story"
 
-## 📖 Overview
+##  Overview
 **HouseLens** is an interactive web platform designed to visualize and explore housing prices across London.  
 It allows users to examine spatial and temporal changes in housing affordability between **2021–2025**, leveraging official data from the **UK Land Registry**.
 
 The platform integrates **frontend visualization**, **backend APIs**, and a **MySQL database** to deliver an accessible and data-driven overview of the London housing market.
 
-🔗 **Website:** [https://10.129.111.8](https://10.129.111.8)  
+ **Website:** [https://10.129.111.8](https://10.129.111.8)  
 ---
 
 ## 👥 Team Members
@@ -18,7 +19,7 @@ The platform integrates **frontend visualization**, **backend APIs**, and a **My
 
 ---
 
-## 🎯 Objectives
+##  Objectives
 1. **Data Processing** – Clean and standardize housing transaction data (2021–2025).  
 2. **Database Creation** – Build a MySQL database to store transaction details by borough.  
 3. **Frontend Design** – Develop a user-friendly and interactive interface for data exploration.  
@@ -28,14 +29,14 @@ The platform integrates **frontend visualization**, **backend APIs**, and a **My
 
 ---
 
-## 🏗️ System Architecture
+##  System Architecture
 HouseLens adopts a **three-layer architecture**:
 - **Frontend:** HTML, CSS, JavaScript, Bootstrap, Chart.js, Google Maps API  
 - **Backend:** Node.js + Express  
 - **Database:** MySQL  
 ---
 
-## 🌍 Key Features
+##  Key Features
 - **Interactive Heatmap:** View borough-level average housing prices with color-coded visualization.  
 - **Trend Analysis:** Display five-year price trends dynamically with Chart.js.  
 - **Property Details:** Explore individual transactions with detailed info pop-ups.  
@@ -43,7 +44,7 @@ HouseLens adopts a **three-layer architecture**:
 
 ---
 
-## ⚙️ API Endpoints
+##  API Endpoints
 | Endpoint | Description |
 |-----------|--------------|
 | `/api/borough-prices` | Returns average property prices by borough |
