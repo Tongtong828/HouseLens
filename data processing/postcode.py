@@ -17,9 +17,10 @@ geo_df = houses.merge(postcodes, left_on="Postcode", right_on="postcode", how="l
 output_path = r"D:\UCL\CASA0017\pricedata\london_2021_2025_geo.csv"
 geo_df.to_csv(output_path, index=False)
 
-print(f"✅ 已保存包含经纬度的新文件：{output_path}")
+print(f"save as：{output_path}")
 
 
 
 print(geo_df[["Postcode", "latitude", "longitude"]].head())
-print("成功匹配率：", geo_df["latitude"].notna().mean() * 100, "%")
+print("successful rate：", geo_df["latitude"].notna().mean() * 100, "%")
+
