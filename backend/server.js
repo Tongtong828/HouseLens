@@ -44,7 +44,7 @@ app.get("/api/transactions/:borough", async (req, res) => {
 
         res.json(rows);
     } catch (err) {
-        console.error("❌ SQL ERROR in /api/transactions:", err);
+        console.error(" SQL ERROR in /api/transactions:", err);
         res.status(500).json({ error: "DB query failed" });
     }
 });
@@ -69,7 +69,7 @@ app.get("/api/transactions", async (req, res) => {
     `);
         res.json(rows);
     } catch (err) {
-        console.error("❌ SQL ERROR in /api/transactions:", err);
+        console.error(" SQL ERROR in /api/transactions:", err);
         res.status(500).json({ error: "DB query failed" });
     }
 });
@@ -101,4 +101,4 @@ app.get("/api/borough-trend/:borough", async (req, res) => {
 });
 
 
-app.listen(3001, () => console.log("✅ Backend running on port 3001"));
+app.listen(3001, () => console.log(" Backend running on port 3001"));
