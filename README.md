@@ -11,9 +11,9 @@ The platform integrates **frontend visualization**, **backend APIs**, and a **My
 ---
 
 ## Team Members
-| Name | UCL ID | Role & Contributions |
-|------|---------|----------------------|
-| **Xintong Shao** |  Database creation, frontend interaction design, data visualization, deployment, documentation |
+| Name | Role & Contributions |
+|------|----------------------|
+| **Xintong Shao** |  Database creation, frontend interaction design, data visualization, deployment, documentation | 
 | **Tianrui Min** |  Data collection and processing, backend API implementation, documentation |
 | **Yewei Bian** |  UI design, frontend interface development, documentation |
 
