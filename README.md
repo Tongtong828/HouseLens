@@ -10,7 +10,7 @@ The platform integrates **frontend visualization**, **backend APIs**, and a **My
  **Website:** [https://10.129.111.8](https://10.129.111.8)  
 ---
 
-## 👥 Team Members
+## Team Members
 | Name | UCL ID | Role & Contributions |
 |------|---------|----------------------|
 | **Xintong Shao** |  Database creation, frontend interaction design, data visualization, deployment, documentation |
@@ -53,7 +53,7 @@ HouseLens adopts a **three-layer architecture**:
 
 ---
 
-## 🧩 Deployment
+##  Deployment
 - **Frontend:** Served by **Nginx** (`/var/www/html/`)  
 - **Backend:** Managed with **PM2** for continuous runtime  
 - **Server:** Hosted on **Raspberry Pi** (IP: 10.129.111.8)
