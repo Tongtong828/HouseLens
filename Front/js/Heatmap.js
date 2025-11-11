@@ -28,6 +28,7 @@ function getBoroughKey(name) {
   return n;
 }
 
+const API_BASE = "http://10.129.111.8:3001";
 
 //Retrieve the average property prices for all boroughs from the database
 async function loadPrices() {
@@ -373,9 +374,9 @@ function showLocationMarkers() {
     const info = `
       <div style="color:black; font-size:14px; line-height:1.4;">
         <b>£${Number(item.price).toLocaleString()}</b><br>
-        🏠 ${typeLabel}<br>
-        📍 ${item.street || ""}, ${item.postcode || ""}<br>
-        🕒 ${item.date ? item.date.split(/[ T]/)[0] : "N/A"}
+        Housing Type：  ${typeLabel}<br>
+        Location：  ${item.street || ""}, ${item.postcode || ""}<br>
+        Date：  ${item.date ? item.date.split(/[ T]/)[0] : "N/A"}
       </div>
     `;
     const popup = new google.maps.InfoWindow({ content: info });
@@ -402,7 +403,7 @@ function openInfoPanel(boroughName) {
   if (canvas) {
     const ctx = canvas.getContext("2d");
     if (trendChart) trendChart.destroy();
-    //Initialise trend chart (no data)
+    //Initialise trend chart 
     trendChart = new Chart(ctx, {
       type: "line",
       data: {
